@@ -8,7 +8,12 @@ import applicationRoutes from "./routes/applicationRoutes";
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*", // we restrict later if needed
+  })
+);
+
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
