@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import Application from "../models/Application";
 
-//Create application yes - for carre
+// CREATE APPLICATION
 export const createApplication = async (req: Request, res: Response) => {
   try {
-    const { company, role, status, appliedDate } = req.body;
+    const { company, role, status, appliedDate, notes } = req.body;
 
     if (!company || !role || !appliedDate) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -16,15 +16,16 @@ export const createApplication = async (req: Request, res: Response) => {
       role,
       status,
       appliedDate,
+      notes: notes || "",
     });
 
     res.status(201).json(application);
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+  } catch {
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-// Get all applications for logged-in user - so he sees
+// GET APPLICATIONS
 export const getApplications = async (req: Request, res: Response) => {
   try {
     const { status, date } = req.query;
@@ -33,26 +34,20 @@ export const getApplications = async (req: Request, res: Response) => {
       user: (req as any).userId,
     };
 
-    if (status) {
-      filter.status = status;
-    }
-
-    if (date) {
-      filter.appliedDate = new Date(date as string);
-    }
+    if (status) filter.status = status;
+    if (date) filter.appliedDate = new Date(date as string);
 
     const applications = await Application.find(filter).sort({
       createdAt: -1,
     });
 
     res.status(200).json(applications);
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+  } catch {
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-
-//updating  API (status change) 
+// UPDATE STATUS
 export const updateApplicationStatus = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -71,7 +66,7 @@ export const updateApplicationStatus = async (req: Request, res: Response) => {
     await application.save();
 
     res.status(200).json(application);
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+  } catch {
+    res.status(500).json({ message: "Server error" });
   }
 };

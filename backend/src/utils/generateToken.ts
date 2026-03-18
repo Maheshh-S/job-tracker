@@ -7,3 +7,11 @@ export const generateAccessToken = (userId: string) => {
     { expiresIn: "15m" }
   );
 };
+
+export const generateRefreshToken = (userId: string) => {
+  return jwt.sign(
+    { userId },
+    process.env.JWT_REFRESH_SECRET as string,
+    { expiresIn: "7d" }
+  );
+};

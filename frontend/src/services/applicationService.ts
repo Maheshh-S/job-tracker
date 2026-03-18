@@ -13,14 +13,16 @@ export const getApplications = async (filters?: {
   return res.data;
 };
 
-export const createApplication = async (data: {
+type CreateApplicationInput = {
   company: string;
   role: string;
   status: string;
   appliedDate: string;
-}) => {
-  const res = await API.post("/applications", data);
-  return res.data;
+  notes?: string;
+};
+
+export const createApplication = (data: CreateApplicationInput) => {
+  return API.post("/applications", data).then((res) => res.data);
 };
 
 export const updateStatus = async (id: string, status: string) => {

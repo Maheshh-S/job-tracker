@@ -8,23 +8,24 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  try {
+    const data = await loginUser(email, password);
 
-    try {
-      const data = await loginUser(email, password);
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
 
-      // store token
-      localStorage.setItem("accessToken", data.accessToken);
-localStorage.setItem("refreshToken", data.refreshToken);
+    toast.success("Login successful");
 
-      toast.success("Login successful");
+    setTimeout(() => {
       navigate("/dashboard");
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Login failed");
-    }
-  };
+    }, 500);
+  } catch (error: any) {
+    toast.error(error.response?.data?.message || "Login failed");
+  }
+};
 
   return (
     <div>
