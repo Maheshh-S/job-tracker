@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import {
   getApplications,
   createApplication,
+  updateStatus,
 } from "../services/applicationService";
 
 type Application = {
@@ -70,6 +71,16 @@ const Dashboard = () => {
       toast.error("Failed to add application");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    try {
+      await updateStatus(id, newStatus);
+      toast.success("Status updated");
+      fetchData();
+    } catch {
+      toast.error("Failed to update status");
     }
   };
 
@@ -159,15 +170,31 @@ const Dashboard = () => {
                 Applied: {new Date(app.appliedDate).toLocaleDateString()}
               </p>
 
+              {/* STATUS BADGE */}
               <span className="inline-block mt-1 text-xs px-2 py-1 rounded bg-blue-100 text-blue-700">
                 {app.status}
               </span>
 
+              {/* NOTES */}
               {app.notes && (
                 <p className="text-sm text-gray-600 mt-2">
                   📝 {app.notes}
                 </p>
               )}
+
+              {/* STATUS UPDATE DROPDOWN */}
+              <select
+                className="border p-2 rounded mt-3"
+                value={app.status}
+                onChange={(e) =>
+                  handleStatusChange(app._id, e.target.value)
+                }
+              >
+                <option>Applied</option>
+                <option>Interviewing</option>
+                <option>Offer</option>
+                <option>Rejected</option>
+              </select>
             </div>
           ))
         )}
