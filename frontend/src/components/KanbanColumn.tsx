@@ -26,7 +26,7 @@ interface KanbanColumnProps {
     icon: string;
   };
   applications: Application[];
-  onStatusChange: (id: string, newStatus: ApplicationStatus) => void;
+  onStatusChange: (id: string, newStatus: ApplicationStatus) => Promise<void>; 
   onEdit?: (app: Application) => void;
   onDelete?: (id: string) => void;
 }
