@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, Calendar, Briefcase, FileText } from "lucide-react";
+import { X, Calendar, Briefcase, FileText } from "lucide-react";
 import { useState, useEffect } from "react";
 import type { ApplicationStatus } from "../types";
 

@@ -9,9 +9,6 @@ import {
   Trash2,
   FileText,
   Calendar,
-  MapPin,
-  DollarSign,
-  User,
   MoreHorizontal,
   Paperclip
 } from "lucide-react";
@@ -26,7 +23,7 @@ interface KanbanColumnProps {
     icon: string;
   };
   applications: Application[];
-  onStatusChange: (id: string, newStatus: ApplicationStatus) => Promise<void>; 
+  onStatusChange: (id: string, newStatus: ApplicationStatus) => void;
   onEdit?: (app: Application) => void;
   onDelete?: (id: string) => void;
 }
@@ -207,12 +204,27 @@ const KanbanColumn = ({ column, applications, onStatusChange, onEdit, onDelete }
                           </div>
                         </div>
 
-                        {/* Notes Section - BEAUTIFULLY STYLED */}
+                        {/* Status Update Dropdown - THIS USES onStatusChange */}
+                        <div className="px-4 mb-3">
+                          <select
+                            value={app.status}
+                            onChange={(e) => onStatusChange(app._id, e.target.value as ApplicationStatus)}
+                            className="w-full text-xs px-2 py-1.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 hover:bg-white transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <option value="Applied">📤 Applied</option>
+                            <option value="Interviewing">💬 Interviewing</option>
+                            <option value="Offer">🎉 Offer</option>
+                            <option value="Rejected">❌ Rejected</option>
+                          </select>
+                        </div>
+
+                        {/* Notes Section */}
                         {app.notes && (
                           <motion.div 
                             initial={false}
                             animate={{ height: expandedNotes === app._id ? 'auto' : 'auto' }}
-                            className="mt-2 px-4 pb-4"
+                            className="px-4 pb-4"
                           >
                             <div 
                               onClick={() => setExpandedNotes(expandedNotes === app._id ? null : app._id)}
@@ -235,7 +247,7 @@ const KanbanColumn = ({ column, applications, onStatusChange, onEdit, onDelete }
                                 )}
                               </div>
 
-                              {/* Notes Content - Beautiful Card Style */}
+                              {/* Notes Content */}
                               <motion.div 
                                 className={`
                                   relative rounded-lg overflow-hidden
@@ -263,7 +275,6 @@ const KanbanColumn = ({ column, applications, onStatusChange, onEdit, onDelete }
                                     {app.notes}
                                   </motion.p>
 
-                                  {/* Note Metadata (if any attachments or tags in future) */}
                                   {expandedNotes === app._id && (
                                     <motion.div 
                                       initial={{ opacity: 0 }}
@@ -271,7 +282,7 @@ const KanbanColumn = ({ column, applications, onStatusChange, onEdit, onDelete }
                                       className="flex items-center space-x-2 mt-2 pt-2 border-t border-amber-200/50"
                                     >
                                       <Paperclip className="w-3 h-3 text-amber-400" />
-                                      <span className="text-[10px] text-amber-600">Added {new Date().toLocaleDateString()}</span>
+                                      <span className="text-[10px] text-amber-600">Added {new Date(app.appliedDate).toLocaleDateString()}</span>
                                     </motion.div>
                                   )}
                                 </div>
