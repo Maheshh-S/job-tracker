@@ -1,4 +1,7 @@
 import express from "express";
+import { updateApplicationStatus } from "../controllers/applicationController";
+
+
 import {
   createApplication,
   getApplications,
@@ -9,5 +12,8 @@ const router = express.Router();
 
 router.post("/", protect, createApplication);
 router.get("/", protect, getApplications);
+
+router.put("/:id/status", protect, updateApplicationStatus);
+
 
 export default router;

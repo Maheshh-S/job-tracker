@@ -27,11 +27,50 @@ export const createApplication = async (req: Request, res: Response) => {
 // Get all applications for logged-in user - so he sees
 export const getApplications = async (req: Request, res: Response) => {
   try {
-    const applications = await Application.find({
+    const { status, date } = req.query;
+
+    let filter: any = {
       user: (req as any).userId,
-    }).sort({ createdAt: -1 });
+    };
+
+    if (status) {
+      filter.status = status;
+    }
+
+    if (date) {
+      filter.appliedDate = new Date(date as string);
+    }
+
+    const applications = await Application.find(filter).sort({
+      createdAt: -1,
+    });
 
     res.status(200).json(applications);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+
+//updating  API (status change) 
+export const updateApplicationStatus = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const application = await Application.findOne({
+      _id: id,
+      user: (req as any).userId,
+    });
+
+    if (!application) {
+      return res.status(404).json({ message: "Application not found" });
+    }
+
+    application.status = status;
+    await application.save();
+
+    res.status(200).json(application);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
