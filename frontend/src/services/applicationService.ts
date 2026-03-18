@@ -29,3 +29,8 @@ export const updateStatus = async (id: string, status: string) => {
   const res = await API.put(`/applications/${id}/status`, { status });
   return res.data;
 };
+
+export const deleteApplication = async (id: string) => {
+  const res = await API.delete(`/applications/${id}`);
+  return res.data;
+};
