@@ -70,3 +70,23 @@ export const updateApplicationStatus = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// DELETE APPLICATION
+export const deleteApplication = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await Application.findOneAndDelete({
+      _id: id,
+      user: (req as any).userId,
+    });
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Application not found" });
+    }
+
+    res.status(200).json({ message: "Deleted successfully" });
+  } catch {
+    res.status(500).json({ message: "Server error" });
+  }
+};

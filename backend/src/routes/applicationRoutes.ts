@@ -1,10 +1,11 @@
 import express from "express";
 import { updateApplicationStatus } from "../controllers/applicationController";
 
+import { deleteApplication } from "../controllers/applicationController";
 
 import {
-  createApplication,
-  getApplications,
+    createApplication,
+    getApplications,
 } from "../controllers/applicationController";
 import { protect } from "../middleware/authMiddleware";
 
@@ -15,5 +16,6 @@ router.get("/", protect, getApplications);
 
 router.put("/:id/status", protect, updateApplicationStatus);
 
+router.delete("/:id", protect, deleteApplication);
 
 export default router;
