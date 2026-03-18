@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import {
   getApplications,
   createApplication,
@@ -36,7 +37,7 @@ const Dashboard = () => {
     e.preventDefault();
 
     if (!company || !role || !appliedDate) {
-      alert("Fill all fields");
+      toast.error("Fill all fields");
       return;
     }
 
@@ -62,7 +63,7 @@ const Dashboard = () => {
         <h1 className="text-2xl font-bold">Job Tracker</h1>
         <button
           onClick={() => {
-            localStorage.removeItem("token");
+            localStorage.clear();
             window.location.href = "/";
           }}
           className="bg-red-500 text-white px-4 py-2 rounded"

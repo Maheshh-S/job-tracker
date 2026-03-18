@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { loginUser } from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,13 +16,13 @@ const Login = () => {
       const data = await loginUser(email, password);
 
       // store token
-      localStorage.setItem("token", data.accessToken);
+      localStorage.setItem("accessToken", data.accessToken);
+localStorage.setItem("refreshToken", data.refreshToken);
 
-      alert("Login successful");
-
+      toast.success("Login successful");
       navigate("/dashboard");
     } catch (error: any) {
-      alert(error.response?.data?.message || "Login failed");
+      toast.error(error.response?.data?.message || "Login failed");
     }
   };
 
