@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { updateStatus } from "../services/applicationService";
 import {
   getApplications,
   createApplication,
@@ -12,12 +13,18 @@ const Dashboard = () => {
   const [status, setStatus] = useState("Applied");
   const [appliedDate, setAppliedDate] = useState("");
 
+  const [filterStatus, setFilterStatus] = useState("");
+  const [filterDate, setFilterDate] = useState("");
+
   const fetchData = async () => {
     try {
-      const data = await getApplications();
+      const data = await getApplications({
+        status: filterStatus || undefined,
+        date: filterDate || undefined,
+      });
       setApplications(data);
     } catch (error) {
-      console.error("Error fetching applications", error);
+      console.error(error);
     }
   };
 
@@ -51,6 +58,29 @@ const Dashboard = () => {
 
   return (
     <div>
+      <div>
+        <h3>Filter</h3>
+
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+        >
+          <option value="">All</option>
+          <option>Applied</option>
+          <option>Interviewing</option>
+          <option>Offer</option>
+          <option>Rejected</option>
+        </select>
+
+        <input
+          type="date"
+          value={filterDate}
+          onChange={(e) => setFilterDate(e.target.value)}
+        />
+
+        <button onClick={fetchData}>Apply Filters</button>
+      </div>
+
       <h2>Dashboard</h2>
 
       {/* FORM */}
@@ -96,7 +126,18 @@ const Dashboard = () => {
           <div key={app._id}>
             <p>{app.company}</p>
             <p>{app.role}</p>
-            <p>{app.status}</p>
+            <select
+              value={app.status}
+              onChange={async (e) => {
+                await updateStatus(app._id, e.target.value);
+                fetchData();
+              }}
+            >
+              <option>Applied</option>
+              <option>Interviewing</option>
+              <option>Offer</option>
+              <option>Rejected</option>
+            </select>
           </div>
         ))
       )}
