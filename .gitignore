@@ -1,0 +1,14 @@
+node_modules
+dist
+.env
+
+# logs
+logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+
+# TypeScript
+*.tsbuildinfo

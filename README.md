@@ -15,3 +15,6 @@ Full-stack application to track job applications with authentication.
 - Filtering by status and date
 
 ## Setup (WIP)
+
+
+
